@@ -1,0 +1,186 @@
+{% extends 'layout.html' %}
+
+{% block title %}Fractalyx - Unleash Collaborative Intelligence{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 bg-dark text-light">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h1 class="display-3 fw-bold mb-4">Unleash Collaborative Intelligence</h1>
+                <p class="lead mb-4">
+                    Power your team with a fractal network of AI agents designed to evolve, adapt, and accelerate your vision. Get started today!
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('payment_bp.pricing') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-tag me-2"></i>See Pricing
+                    </a>
+                    <a href="{{ url_for('auth_bp.register') }}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Sign Up Free
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{{ url_for('static', filename='img/fractal-network.svg') }}" alt="Fractal Intelligence Network" class="img-fluid" style="max-height: 400px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold mb-3">The Fractal Intelligence Network</h2>
+                <p class="lead text-secondary">Our system employs a fractal network of specialized AI agents that collaborate, evolve, and adapt to help your team accelerate your vision.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                            <i class="bi bi-diagram-3 text-white" style="font-size: 2rem;"></i>
+                        </div>
+                        <h3 class="mb-3">Coordinated Teamwork</h3>
+                        <p class="text-secondary">Our fractal nodes work together seamlessly, each specializing in different aspects of your project to ensure comprehensive solutions.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                            <i class="bi bi-eye text-white" style="font-size: 2rem;"></i>
+                        </div>
+                        <h3 class="mb-3">Adaptive Intelligence</h3>
+                        <p class="text-secondary">Our fractal network evolves with your needs, analyzing visual content and adapting to provide deeper insights for your projects.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                            <i class="bi bi-kanban text-white" style="font-size: 2rem;"></i>
+                        </div>
+                        <h3 class="mb-3">Progress Tracking</h3>
+                        <p class="text-secondary">Track progress with tickets and checkpoints, ensuring your projects stay on schedule and nothing falls through the cracks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Fractal Node Types Section -->
+<section class="py-5 bg-dark">
+    <div class="container py-5">
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold mb-3">Meet Your Fractal Intelligence Network</h2>
+                <p class="lead text-secondary">Each node in our fractal network has specialized capabilities that evolve to accelerate your project success.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm bg-dark">
+                    <div class="card-body p-4">
+                        <h4 class="d-flex align-items-center mb-3">
+                            <i class="bi bi-compass me-2 text-primary"></i>
+                            Coordinator Node
+                        </h4>
+                        <p class="text-secondary">Oversees the project workflow and delegates tasks to specialized nodes. The Coordinator manages communication and ensures all parts of the project work together.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm bg-dark">
+                    <div class="card-body p-4">
+                        <h4 class="d-flex align-items-center mb-3">
+                            <i class="bi bi-graph-up me-2 text-primary"></i>
+                            Planner Node
+                        </h4>
+                        <p class="text-secondary">Creates detailed project plans, breaks down complex goals into manageable tasks, and establishes realistic timelines and milestones.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm bg-dark">
+                    <div class="card-body p-4">
+                        <h4 class="d-flex align-items-center mb-3">
+                            <i class="bi bi-search me-2 text-primary"></i>
+                            Researcher Node
+                        </h4>
+                        <p class="text-secondary">Gathers and analyzes information relevant to your project, identifying trends, best practices, and potential challenges.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm bg-dark">
+                    <div class="card-body p-4">
+                        <h4 class="d-flex align-items-center mb-3">
+                            <i class="bi bi-code-square me-2 text-primary"></i>
+                            Developer Node
+                        </h4>
+                        <p class="text-secondary">Works on creating solutions, writing code, and implementing technical aspects of your project with precision and efficiency.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm bg-dark">
+                    <div class="card-body p-4">
+                        <h4 class="d-flex align-items-center mb-3">
+                            <i class="bi bi-bug me-2 text-primary"></i>
+                            Tester Node
+                        </h4>
+                        <p class="text-secondary">Ensures quality by thoroughly testing solutions, identifying bugs or issues, and validating that everything works as expected.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm bg-dark">
+                    <div class="card-body p-4">
+                        <h4 class="d-flex align-items-center mb-3">
+                            <i class="bi bi-eye-fill me-2 text-primary"></i>
+                            Reviewer Node
+                        </h4>
+                        <p class="text-secondary">Provides critical feedback on work from other nodes, ensuring high standards are maintained throughout the project lifecycle.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Project Management?</h2>
+                <p class="lead text-secondary mb-5">Sign up today and unleash collaborative intelligence with Fractalyx to accelerate your vision.</p>
+                <div class="d-grid gap-3 d-sm-flex justify-content-center">
+                    <a href="{{ url_for('auth_bp.register') }}" class="btn btn-primary btn-lg px-5">
+                        <i class="bi bi-rocket me-2"></i>Get Started
+                    </a>
+                    <a href="{{ url_for('payment_bp.pricing') }}" class="btn btn-outline-dark btn-lg px-5">
+                        <i class="bi bi-tag me-2"></i>View Pricing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
