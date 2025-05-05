@@ -1,0 +1,143 @@
+{% extends 'layout.html' %}
+
+{% block title %}Pricing - Fractalyx{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-5 text-center">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="display-4 mb-3">Choose Your Plan</h1>
+            <p class="lead text-secondary">Select the plan that best fits your needs. All plans include core features and access to our fractal intelligence network.</p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center g-4 mb-5">
+        {% for plan in plans %}
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm position-relative {% if plan.name == 'Professional' %}highlight{% endif %}">
+                {% if plan.name == 'Professional' %}
+                <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary p-2 px-3">
+                    Popular Choice
+                </div>
+                {% endif %}
+                
+                <div class="card-header bg-dark text-center border-0 pt-5 pb-4">
+                    <h4 class="mb-3">{{ plan.name }}</h4>
+                    <div class="pricing">
+                        <span class="display-4 fw-bold">${{ "%0.2f"|format(plan.price) }}</span>
+                        <span class="text-muted">/ {{ plan.interval }}</span>
+                    </div>
+                    <p class="text-secondary mt-2">{{ plan.description }}</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <ul class="list-unstyled">
+                        {% for feature in plan.features %}
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            {{ feature }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="card-footer bg-dark border-0 p-4 text-center">
+                    {% if session.user_id %}
+                        <a href="{{ url_for('payment_bp.create_checkout_session_route', price_id=plan.price_id) }}" class="btn btn-primary btn-lg d-block w-100">
+                            Subscribe Now
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth_bp.register') }}" class="btn btn-primary btn-lg d-block w-100">
+                            Sign Up
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark p-4">
+                    <h3 class="mb-0">Frequently Asked Questions</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="accordion" id="pricingFAQ">
+                        <div class="accordion-item border-0 mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Can I upgrade or downgrade my plan later?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                <div class="accordion-body">
+                                    Yes, you can upgrade or downgrade your subscription at any time. Changes will be applied at the start of your next billing cycle.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Is there a free trial available?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                <div class="accordion-body">
+                                    We offer a 7-day free trial for the Professional plan. You won't be charged until the trial period ends, and you can cancel anytime before then.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    What payment methods do you accept?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                <div class="accordion-body">
+                                    We accept all major credit cards, including Visa, Mastercard, American Express, and Discover. We also support payment through PayPal.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    How secure is my payment information?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                <div class="accordion-body">
+                                    All payments are processed securely through Stripe, a PCI-compliant payment processor. We do not store your credit card information on our servers.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom styles for pricing page -->
+<style>
+.highlight {
+    transform: scale(1.05);
+    border: 2px solid var(--bs-primary) !important;
+    z-index: 1;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+</style>
+{% endblock %}
