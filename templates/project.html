@@ -1,0 +1,348 @@
+{% extends 'layout.html' %}
+
+{% block title %}Project: {{ project.name }} - MultiAgent System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>{{ project.name }}</h1>
+                <div class="btn-group">
+                    <a href="{{ url_for('main_bp.project_chat', project_id=project.id) }}" class="btn btn-primary">
+                        <i class="bi bi-chat-dots"></i> Chat with Agents
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#newTicketModal">
+                        <i class="bi bi-plus-lg"></i> New Ticket
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#newCheckpointModal">
+                        <i class="bi bi-flag"></i> New Checkpoint
+                    </button>
+                </div>
+            </div>
+            <p class="text-muted">{{ project.description }}</p>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="projectTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets-tab-pane" type="button" role="tab">
+                        <i class="bi bi-kanban"></i> Tickets
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="checkpoints-tab" data-bs-toggle="tab" data-bs-target="#checkpoints-tab-pane" type="button" role="tab">
+                        <i class="bi bi-flag"></i> Checkpoints
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="projectTabsContent">
+                <!-- Tickets Tab -->
+                <div class="tab-pane fade show active" id="tickets-tab-pane" role="tabpanel" aria-labelledby="tickets-tab" tabindex="0">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <!-- Filter Controls -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <select id="ticketFilter" class="form-select">
+                                        <option value="all">All Tickets</option>
+                                        <option value="priority-critical">Critical Priority</option>
+                                        <option value="priority-high">High Priority</option>
+                                        <option value="priority-medium">Medium Priority</option>
+                                        <option value="priority-low">Low Priority</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshTickets">
+                                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Kanban Board -->
+                            <div class="kanban-board">
+                                <!-- Open Column -->
+                                <div class="kanban-column" data-status="open">
+                                    <div class="kanban-column-header">
+                                        <h5>Open</h5>
+                                        <span class="badge bg-secondary ticket-counter">0</span>
+                                    </div>
+                                    <div class="tickets-container" data-status="open">
+                                        <!-- Tickets will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- In Progress Column -->
+                                <div class="kanban-column" data-status="in_progress">
+                                    <div class="kanban-column-header">
+                                        <h5>In Progress</h5>
+                                        <span class="badge bg-primary ticket-counter">0</span>
+                                    </div>
+                                    <div class="tickets-container" data-status="in_progress">
+                                        <!-- Tickets will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Review Column -->
+                                <div class="kanban-column" data-status="review">
+                                    <div class="kanban-column-header">
+                                        <h5>Review</h5>
+                                        <span class="badge bg-info ticket-counter">0</span>
+                                    </div>
+                                    <div class="tickets-container" data-status="review">
+                                        <!-- Tickets will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Completed Column -->
+                                <div class="kanban-column" data-status="completed">
+                                    <div class="kanban-column-header">
+                                        <h5>Completed</h5>
+                                        <span class="badge bg-success ticket-counter">0</span>
+                                    </div>
+                                    <div class="tickets-container" data-status="completed">
+                                        <!-- Tickets will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Blocked Column -->
+                                <div class="kanban-column" data-status="blocked">
+                                    <div class="kanban-column-header">
+                                        <h5>Blocked</h5>
+                                        <span class="badge bg-danger ticket-counter">0</span>
+                                    </div>
+                                    <div class="tickets-container" data-status="blocked">
+                                        <!-- Tickets will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Checkpoints Tab -->
+                <div class="tab-pane fade" id="checkpoints-tab-pane" role="tabpanel" aria-labelledby="checkpoints-tab" tabindex="0">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <div id="checkpointsList">
+                                <!-- Checkpoints will be loaded here -->
+                                <div class="text-center p-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading checkpoints...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden element to store project ID -->
+    <div id="projectData" data-project-id="{{ project.id }}" class="d-none"></div>
+</div>
+
+<!-- New Ticket Modal -->
+<div class="modal fade" id="newTicketModal" tabindex="-1" aria-labelledby="newTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newTicketModalLabel">Create New Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newTicketForm">
+                    <div class="mb-3">
+                        <label for="ticketTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="ticketTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ticketDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="ticketDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ticketPriority" class="form-label">Priority</label>
+                        <select class="form-select" id="ticketPriority">
+                            <option value="MEDIUM">Medium</option>
+                            <option value="LOW">Low</option>
+                            <option value="HIGH">High</option>
+                            <option value="CRITICAL">Critical</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ticketDueDate" class="form-label">Due Date (Optional)</label>
+                        <input type="date" class="form-control" id="ticketDueDate">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Create Ticket</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Checkpoint Modal -->
+<div class="modal fade" id="newCheckpointModal" tabindex="-1" aria-labelledby="newCheckpointModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newCheckpointModalLabel">Create New Checkpoint</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newCheckpointForm">
+                    <div class="mb-3">
+                        <label for="checkpointName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="checkpointName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="checkpointDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="checkpointDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="checkpointDate" class="form-label">Target Date (Optional)</label>
+                        <input type="date" class="form-control" id="checkpointDate">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Create Checkpoint</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Checkpoint Modal -->
+<div class="modal fade" id="editCheckpointModal" tabindex="-1" aria-labelledby="editCheckpointModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCheckpointModalLabel">Edit Checkpoint</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCheckpointForm">
+                    <input type="hidden" id="editCheckpointId">
+                    <div class="mb-3">
+                        <label for="editCheckpointName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editCheckpointName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCheckpointDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editCheckpointDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCheckpointDate" class="form-label">Target Date (Optional)</label>
+                        <input type="date" class="form-control" id="editCheckpointDate">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Checkpoint</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ticket Details Modal -->
+<div class="modal fade" id="ticketDetailsModal" tabindex="-1" aria-labelledby="ticketDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketDetailsModalLabel">Ticket Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="ticket-info mb-4">
+                    <!-- Ticket details will be loaded here -->
+                </div>
+                
+                <h5>Comments</h5>
+                <div id="ticketComments" class="mb-3">
+                    <!-- Comments will be loaded here -->
+                    <div class="text-center p-3">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading comments...</p>
+                    </div>
+                </div>
+                
+                <form id="addCommentForm">
+                    <div class="mb-3">
+                        <label for="commentContent" class="form-label">Add Comment</label>
+                        <textarea class="form-control" id="commentContent" rows="2" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block additional_js %}
+<script src="{{ url_for('static', filename='js/project.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the page
+    loadProjectData();
+    
+    // Setup refresh button
+    document.getElementById('refreshTickets').addEventListener('click', function() {
+        loadTickets();
+    });
+    
+    // Setup tabs
+    document.getElementById('checkpoints-tab').addEventListener('click', function() {
+        loadCheckpoints();
+    });
+    
+    // Setup comment form submission
+    document.getElementById('addCommentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const ticketId = document.getElementById('ticketDetailsModal').getAttribute('data-ticket-id');
+        const content = document.getElementById('commentContent').value.trim();
+        
+        if (!content) return;
+        
+        fetch(`/api/tickets/${ticketId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                content: content,
+                is_user: true
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error adding comment');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Clear the input
+            document.getElementById('commentContent').value = '';
+            
+            // Reload comments
+            loadTicketComments(ticketId);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('Failed to add comment: ' + error.message, 'danger');
+        });
+    });
+});
+</script>
+{% endblock %}
