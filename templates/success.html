@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block title %}Subscription Successful - Fractalyx{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-0 shadow-sm p-5">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                </div>
+                <h1 class="display-5 fw-bold mb-3">Subscription Successful!</h1>
+                <p class="lead text-secondary mb-4">Thank you for subscribing to Fractalyx. Your account has been successfully activated.</p>
+                
+                <div class="d-grid gap-3 d-sm-flex justify-content-center">
+                    <a href="{{ url_for('main_bp.dashboard') }}" class="btn btn-primary btn-lg px-4 gap-3">
+                        <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                    </a>
+                    <a href="{{ url_for('main_bp.index') }}" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="bi bi-house-door me-2"></i>Home
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm p-4 mt-4">
+                <h4 class="mb-3">What's Next?</h4>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="p-3">
+                            <i class="bi bi-robot mb-3" style="font-size: 2rem;"></i>
+                            <h5>Create a Project</h5>
+                            <p class="text-secondary small">Start by creating your first project in the system.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3">
+                            <i class="bi bi-chat-dots mb-3" style="font-size: 2rem;"></i>
+                            <h5>Chat with Agents</h5>
+                            <p class="text-secondary small">Communicate with our fractal intelligence network to help with your tasks.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3">
+                            <i class="bi bi-kanban mb-3" style="font-size: 2rem;"></i>
+                            <h5>Track Progress</h5>
+                            <p class="text-secondary small">Monitor your project's progress through tickets and checkpoints.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
